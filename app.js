@@ -6,8 +6,12 @@ const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
 let html = ''
 let key = ''
+let isSharp = false
 console.log(key)
 const container = document.getElementById('container')
+let whiteNote = document.querySelector('.whitenote')
+let blackNote = document.querySelector('.blacknote')
+
 
 for (let octave = 0; octave < 2; octave++) {
 
@@ -19,51 +23,92 @@ for (let octave = 0; octave < 2; octave++) {
       hasSharp = false
     }
     //testing
-    // let whites = document.createElement('div')
-    // console.log(whites)
-    // // whites.classList.add('whitenote')
-    // whites.setAttribute('class', 'whitenote')
+    let whites = document.createElement('div')
+    console.log(whites)
+    // whites.classList.add('whitenote')
+    whites.setAttribute('class', 'whitenote')
     // whites.addEventListener('mousedown', noteDown(this, false))
     // whites.addEventListener('mouseup', noteUp(this, false))
     // whites.addEventListener('mouseleave', noteUp(this, false))
-    // whites.setAttribute('data', `note: '${note + (octave + 4)}'`)
-    // container.appendChild(whites)
+    whites.addEventListener('mousedown', noteDown)
+    whites.addEventListener('mouseup', noteUp)
+    // whites.addEventListener('mouseleave', noteUp, false)
+    whites.setAttribute('data', `note: '${note + (octave + 4)}'`)
+    container.appendChild(whites)
 
 
-    html += `<div class='whitenote' onmousedown='noteDown(this, false)' onmouseup='noteUp(this, false)' onmouseleave='noteUp(this, false)' data-note='${note + (octave + 4)}'>`
-    let whiteNote = document.querySelector('.whitenote')
+    // html += `<div class='whitenote' onmousedown='noteDown(this, false)' onmouseup='noteUp(this, false)' onmouseleave='noteUp(this, false)' data-note='${note + (octave + 4)}'>`
 
     if (hasSharp) {
       //testing
-      // let blacks = document.createElement('div')
-      // console.log(blacks)
-      // // blacks.classList.add('blacknote')
-      // blacks.setAttribute('class', 'blacknote')
+      let blacks = document.createElement('div')
+      console.log(blacks)
+      // blacks.classList.add('blacknote')
+      blacks.setAttribute('class', 'blacknote')
       // blacks.addEventListener('mousedown', noteDown(this, true))
       // blacks.addEventListener('mouseup', noteUp(this, true))
       // blacks.addEventListener('mouseleave', noteUp(this, true))
-      // blacks.setAttribute('data', `note: '${note + '#' + (octave + 4)}'`)
-      // container.appendChild(blacks)
+      blacks.addEventListener('mousedown', noteDown)
+      blacks.addEventListener('mouseup', noteUp)
+      // blacks.addEventListener('mouseleave', noteUp, true)
+      blacks.setAttribute('data', `note: '${note + '#' + (octave + 4)}'`)
+      whites.appendChild(blacks)
 
-      html += `<div class='blacknote' onmousedown='noteDown(this, true)' onmouseup='noteUp(this, true)' onmouseleave='noteUp(this, true)' data-note='${note + '#' + (octave + 4)}' data-='${key}'></div>`
-      let blackNote = document.querySelector('.blacknote')
+      // html += `<div class='blacknote' onmousedown='noteDown(this, true)' onmouseup='noteUp(this, true)' onmouseleave='noteUp(this, true)' data-note='${note + '#' + (octave + 4)}' data-='${key}'></div>`
     }
-    html += `</div>`
+    // html += `</div>`
 
   }
 }
 
-document.getElementById('container').innerHTML = html
+// document.getElementById('container').innerHTML = html
 
-function noteUp(elem, isSharp) {
-  elem.style.background = isSharp ? 'black' : '#fffff0'
+function noteUp(elem) {
 
+  if (elem.path[0].classList[0]== 'blacknote') {
+    isSharp = true
+    event.target.style.background = 'black'
+  }
+  if (elem.path[0].classList[0]== 'whitenote') {
+    isSharp = false
+    event.target.style.background = '#fffff0'
+  }
+  console.log(isSharp)
+  // console.log(this)
+  // console.log(event.target)
+  // console.log(elem.path[0])
+  // console.log(isSharp)
+  // console.log(event)
+  // elem.style.background = isSharp ? 'black' : '#fffff0'
+  // event.target.style.background = isSharp ? 'black' : '#fffff0'
 }
 
-function noteDown(elem, isSharp) {
-  console.log(elem.dataset)
-  let note = elem.dataset.note
-  elem.style.background = isSharp ? '#777' : '#ccc'
+function noteDown(elem) {
+
+  if (elem.path[0].classList[0] == 'blacknote') {
+    isSharp = true
+    event.target.style.background = '#777'
+
+  }
+  if (elem.path[0].classList[0]== 'whitenote') {
+    isSharp = false
+    event.target.style.background = '#ccc'
+
+  }
+  console.log(event.target)
+// function noteDown(isSharp) {
+  console.log(elem.path[0].classList[0])
+  console.log(this.dataset)
+  console.log(isSharp)
+  console.log(elem)
+  let noteSplit = elem.path[0].attributes[1].nodeValue.split(' ')
+  let noteSplice = noteSplit[1].slice(1, -1)
+  console.log(noteSplice)
+  // console.log(event.target)
+  let note = noteSplice
+  // this.style.background = isSharp ? '#777' : '#ccc'
+  // event.target.style.background = isSharp ? '#777' : '#ccc'
+
   // synth.triggerAttackRelease(note, '16n')
   synth.triggerAttackRelease(note, '8n')
 
@@ -78,9 +123,34 @@ function noteDown(elem, isSharp) {
 // }
 
 document.addEventListener("keydown", e => {
+  console.log(e)
+  console.log(document.querySelector('.whitenote'))
+  console.log(e.key)
+
+  let whiteNote = document.querySelector('.whitenote')
+  let blackNote = document.querySelector('.blacknote')
+  console.log(whiteNote)
+  
+  if (e.key == 'd' || 'f' || 'g' || 'h' || 'j' || 'k' || 'l') {
+      // event.target.style.background = '#ccc'
+  }
+  else {
+      // event.target.style.background = '#777'
+
+  }
+  // if (e.path[0].classList[0] == 'blacknote') {
+  //   isSharp = true
+
+  // }
+  // if (e.path[0].classList[0]== 'whitenote') {
+  //   isSharp = false
+
+  // }
 
   switch (e.key) {
     case "d":
+    console.log(synth.triggerAttack())
+    console.log()
       return synth.triggerAttack("C4");
     case "r":
       return synth.triggerAttack("C#4");
@@ -110,6 +180,15 @@ document.addEventListener("keydown", e => {
 });
 
 document.addEventListener("keyup", e => {
+
+  // if (e.path[0].classList[0]== 'blacknote') {
+  //   isSharp = true
+  //   event.target.style.background = 'black'
+  // }
+  // if (e.path[0].classList[0]== 'whitenote') {
+  //   isSharp = false
+  //   event.target.style.background = '#fffff0'
+  // }
 
   switch (e.key) {
     case "d":

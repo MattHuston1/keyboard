@@ -20,6 +20,7 @@
   float: left;
   border-right: 1px solid black;
   position: relative;
+  /* border: 1px solid black; */
   border-radius: 5px;
   /* border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px; */
